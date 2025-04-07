@@ -1,0 +1,1337 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+//Admin
+use App\Http\Controllers\AdminController;
+//HRM
+use App\Http\Controllers\HrmBackOfficeController;
+//Deed
+use App\Http\Controllers\DeedController;
+//Finance
+use App\Http\Controllers\FinanceController;
+//Purchase
+use App\Http\Controllers\PurchaseController;
+//Inventory
+use App\Http\Controllers\InventoryController;
+//Inventory
+use App\Http\Controllers\ITBackOfficeController;
+//Sales
+use App\Http\Controllers\SalesController;
+//File Management
+use App\Http\Controllers\FileManagerController;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
+|
+*/
+
+// Route::get('/trr', function () {
+
+// 	return $ci1_pro_product_sub_group = DB::table('pro_product_sub_group')
+//                           ->Where('pg_id', 2)
+//                           ->Where('pg_sub_id', '!=',61)
+//                           ->orderBy('pg_sub_name', 'asc')
+//                           ->get();
+//     // return view('welcome');
+// });
+
+
+
+Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Auth::routes();
+
+Route::group(['middleware' => 'auth'], function () {
+
+
+Route::get('/admin', [App\Http\Controllers\ModuleController::class, 'admin'])->name('admin');
+
+
+//Admin User Management
+//User
+Route::get('/admin/create_user', [App\Http\Controllers\AdminController::class, 'admincuser'])->name('create_user');
+Route::post('/admin/create_user', [App\Http\Controllers\AdminController::class, 'admincuserstore'])->name('admincuserstore');
+Route::get('/admin/create_user/{id}', [App\Http\Controllers\AdminController::class, 'admincuseredit'])->name('admincuseredit');
+Route::post('/admin/create_user/{update}', [App\Http\Controllers\AdminController::class, 'admincuserupdate'])->name('admincuserupdate');
+Route::get('/admin/user_permission/{id}', [App\Http\Controllers\AdminController::class, 'admincuser_permission'])->name('admincuser_permission');
+
+Route::get('/admin/moduleMainMenu/{id}', [App\Http\Controllers\AdminController::class, 'moduleMainMenu'])->name('moduleMainMenu');
+
+
+//Sub menu for user
+// Route::get('/admin/submenu_for_user', [AdminController::class, 'SubMenuforUser'])->name('submenu_for_user');
+
+Route::get('admin/submenu_for_user', [AdminController::class, 'SubMenuforUser'])->name('submenu_for_user');
+Route::post('admin/sub_menu_user_list', [AdminController::class, 'sub_menu_user_list'])->name('sub_menu_user_list');
+Route::get('admin/sub_menu_user_info/{id}/{id2}/{id3}', [AdminController::class, 'sub_menu_user_info'])->name('sub_menu_user_info');
+Route::post('admin/sub_menu_user/store/{id}', [AdminController::class, 'sub_menu_user_store'])->name('sub_menu_user_store');
+
+
+//User Module and company
+Route::get('admin/user_module_and_company',[AdminController::class, 'UserModuleCompany'])->name('user_module_and_company');
+Route::post('/user_mc_list',[AdminController::class, 'user_mc_list'])->name('user_mc_list');
+//Module
+Route::get('admin/user_module_edit/{emp_id}',[AdminController::class, 'user_module_edit'])->name('user_module_edit');
+Route::post('admin/user_module_update/{emp_id}',[AdminController::class, 'user_module_update'])->name('user_module_update');
+//company
+Route::get('admin/user_company_edit/{emp_id}',[AdminController::class, 'user_company_edit'])->name('user_company_edit');
+Route::post('admin/user_company_update/{emp_id}',[AdminController::class, 'user_company_update'])->name('user_company_update');
+
+
+// Route::get('/hrm/postingEmployee/{id}', [App\Http\Controllers\HrmBackOfficeController::class, 'postingEmployee'])->name('postingEmployee');
+
+// Route::get('/hrm/basic_info/{id}', [App\Http\Controllers\HrmBackOfficeController::class, 'hrmbackbasic_infoedit'])->name('hrmbackbasic_infoedit');
+
+// Route::post('/hrm/basic_info/{update}', [App\Http\Controllers\HrmBackOfficeController::class, 'hrmbackbasic_infoupdate'])->name('hrmbackbasic_infoupdate');
+
+
+
+Route::get('/hrm', [App\Http\Controllers\ModuleController::class, 'hrm'])->name('hrm');
+
+//HRM Backoffice
+//Company
+Route::get('/hrm/company', [HrmBackOfficeController::class, 'hrmbackcompany'])->name('company');
+Route::post('/hrm/company', [HrmBackOfficeController::class, 'hrmbackcompanystore'])->name('hrmbackcompanystore');
+Route::get('/hrm/company/edit/{id}', [HrmBackOfficeController::class, 'hrmbackcompanyedit'])->name('hrmbackcompanyedit');
+Route::post('/hrm/company-up', [HrmBackOfficeController::class, 'hrmbackcompanyupdate'])->name('hrmbackcompanyupdate');
+
+//end Company
+
+//Designation
+Route::get('/hrm/designation', [HrmBackOfficeController::class, 'hrmbackdesignation'])->name('designation');
+Route::post('/hrm/designation', [HrmBackOfficeController::class, 'hrmbackdesignationstore'])->name('hrmbackdesignationstore');
+Route::get('/hrm/designation/edit/{id}', [HrmBackOfficeController::class, 'hrmbackdesignationedit'])->name('hrmbackdesignationedit');
+Route::post('/hrm/designation-up', [HrmBackOfficeController::class, 'hrmbackdesignationupdate'])->name('hrmbackdesignationupdate');
+//end Designation
+
+//department
+Route::get('/hrm/department', [HrmBackOfficeController::class, 'hrmbackdepartment'])->name('department');
+Route::post('/hrm/department', [HrmBackOfficeController::class, 'hrmbackdepartmentstore'])->name('hrmbackdepartmentstore');
+Route::get('/hrm/department/edit/{id}', [HrmBackOfficeController::class, 'hrmbackdepartmentedit'])->name('hrmbackdepartmentedit');
+Route::post('/hrm/department-up', [HrmBackOfficeController::class, 'hrmbackdepartmentupdate'])->name('hrmbackdepartmentupdate');
+//end department
+
+//section
+Route::get('/hrm/section', [HrmBackOfficeController::class, 'hrmbacksection'])->name('section');
+Route::post('/hrm/section', [HrmBackOfficeController::class, 'hrmbacksectionstore'])->name('hrmbacksectionstore');
+Route::get('/hrm/section/edit/{id}', [HrmBackOfficeController::class, 'hrmbacksectionedit'])->name('hrmbacksectionedit');
+Route::post('/hrm/section-up', [HrmBackOfficeController::class, 'hrmbacksectionupdate'])->name('hrmbacksectionupdate');
+//end Designation
+
+
+
+
+//place of posting
+Route::get('/hrm/placeposting', [HrmBackOfficeController::class, 'hrmbackplaceposting'])->name('placeposting');
+Route::post('/hrm/placeposting', [HrmBackOfficeController::class, 'hrmbackplace_postingstore'])->name('hrmbackplace_postingstore');
+Route::get('/hrm/placeposting/edit/{id}', [HrmBackOfficeController::class, 'hrmbackplace_postingedit'])->name('hrmbackplace_postingedit');
+Route::post('/hrm/placeposting/{update}', [HrmBackOfficeController::class, 'hrmbackplace_postingupdate'])->name('hrmbackplace_postingupdate');
+
+//end place of posting
+
+//Bio Device
+Route::get('/hrm/biodevice', [HrmBackOfficeController::class, 'hrmbackbio_device'])->name('biodevice');
+Route::post('/hrm/biodevice', [HrmBackOfficeController::class, 'hrmbackbio_devicestore'])->name('hrmbackbio_devicestore');
+Route::get('/hrm/biodevice/{id}', [HrmBackOfficeController::class, 'hrmbackbio_deviceedit'])->name('hrmbackbio_deviceedit');
+Route::post('/hrm/biodevice/{update}', [HrmBackOfficeController::class, 'hrmbackbio_deviceupdate'])->name('hrmbackbio_deviceupdate');
+//end Bio Device
+
+
+//policy
+Route::get('/hrm/policy', [HrmBackOfficeController::class, 'hrmbackpolicy'])->name('policy');
+Route::post('/hrm/policy', [HrmBackOfficeController::class, 'hrmbackpolicystore'])->name('hrmbackpolicystore');
+Route::get('/hrm/policy/{id}', [HrmBackOfficeController::class, 'hrmbackpolicyedit'])->name('hrmbackpolicyedit');
+Route::post('/hrm/policy/{update}', [HrmBackOfficeController::class, 'hrmbackpolicyupdate'])->name('hrmbackpolicyupdate');
+Route::get('/hrm/policy_sub', [HrmBackOfficeController::class, 'HrmPolicySub'])->name('policy_sub');
+
+
+//end policy
+
+//holiday
+Route::get('/hrm/holiday', [HrmBackOfficeController::class, 'hrmbackholiday'])->name('holiday');
+Route::post('/hrm/holiday', [HrmBackOfficeController::class, 'hrmbackholidaystore'])->name('hrmbackholidaystore');
+Route::get('/hrm/holiday/{id}', [HrmBackOfficeController::class, 'hrmbackholidayedit'])->name('hrmbackholidayedit');
+Route::post('/hrm/holiday/{update}', [HrmBackOfficeController::class, 'hrmbackholidayupdate'])->name('hrmbackholidayupdate');
+
+
+
+//end holiday
+
+//basic_info
+Route::get('/hrm/basic_info', [HrmBackOfficeController::class, 'hrmbackbasic_info'])->name('basic_info');
+
+Route::post('/hrm/basic_info', [HrmBackOfficeController::class, 'hrmbackbasic_infostore'])->name('hrmbackbasic_infostore');
+
+Route::get('/hrm/basic_info/{id}', [HrmBackOfficeController::class, 'hrmbackbasic_infoedit'])->name('hrmbackbasic_infoedit');
+
+Route::post('/hrm/basic_info/{update}', [HrmBackOfficeController::class, 'hrmbackbasic_infoupdate'])->name('hrmbackbasic_infoupdate');
+
+Route::get('/hrm/basic_info/{company_id}', [HrmBackOfficeController::class, 'hrmbackbasic_company_id'])->name('hrmbackbasic_company_id');
+
+//end basic_info
+
+//Employee Reporting Boss List
+Route::get('/hrm/reporting_boss/{id2}', [HrmBackOfficeController::class, 'HrmReportingBoss'])->name('reporting_boss');
+Route::post('/hrm/reporting_boss', [HrmBackOfficeController::class, 'HrmReportingBossStore'])->name('HrmReportingBossStore');
+Route::get('/hrm/reporting_boss/edit/{id}', [HrmBackOfficeController::class, 'HrmReportingBossEdit'])->name('HrmReportingBossEdit');
+Route::post('/hrm/reporting_boss/{update}', [HrmBackOfficeController::class, 'HrmReportingBosUpdate'])->name('HrmReportingBosUpdate');
+
+
+//basic_info for HR
+Route::get('/hrm/basic_info_up', [HrmBackOfficeController::class, 'HrmBasicInfoUp'])->name('basic_info_up');
+Route::get('/hrm/basic_info_up/{id}', [HrmBackOfficeController::class, 'HrmBasicInfoUpEdit'])->name('HrmBasicInfoUpEdit');
+Route::post('/hrm/basic_info_up/{update}', [HrmBackOfficeController::class, 'HrmBasicInfoUpupdate'])->name('HrmBasicInfoUpupdate');
+
+
+//bio_data
+Route::get('/hrm/bio_data', [HrmBackOfficeController::class, 'hrmbackbio_data'])->name('bio_data');
+Route::post('/hrm/bio_data', [HrmBackOfficeController::class, 'hrmbio_datastore'])->name('hrmbio_datastore');
+
+Route::get('/biodata_file/{emp_id}', [HrmBackOfficeController::class, 'biodata_file'])->name('biodata_file');
+Route::post('/biodata_file', [HrmBackOfficeController::class, 'biodata_file_store'])->name('biodata_file_store');
+
+//Educational qualification
+Route::get('/educational_qualification/{emp_id}', [HrmBackOfficeController::class, 'educational_qualification'])->name('educational_qualification');
+Route::post('/educational_qualification', [HrmBackOfficeController::class, 'educational_qualification_store'])->name('educational_qualification_store');
+
+//Professional Training
+Route::get('/professional_training/{emp_id}', [HrmBackOfficeController::class, 'professional_training'])->name('professional_training');
+Route::post('/professional_training', [HrmBackOfficeController::class, 'professional_training_store'])->name('professional_training_store');
+
+//Experience
+Route::get('/experience/{emp_id}', [HrmBackOfficeController::class, 'experience'])->name('experience');
+Route::post('/experience', [HrmBackOfficeController::class, 'experience_store'])->name('experience_store');
+
+// biodata print -web
+// Route::get('/biodata/{employee_id}', [HrmBackOfficeController::class, 'biodata'])->name('biodata');
+
+Route::get('/biodata_print/{emp_id}', [HrmBackOfficeController::class, 'biodata'])->name('biodata_print');
+
+
+
+//employee_attendance report
+Route::get('/hrm/companyEmployee/{id}', [HrmBackOfficeController::class, 'companyEmployee'])->name('companyEmployee');
+
+// Route::post('/hrm/bio_data', [HrmBackOfficeController::class, 'hrmbackbio_datastore'])->name('hrmbackbio_datastore');
+
+Route::get('/hrm/bio_data/{id}', [HrmBackOfficeController::class, 'hrmbio_dataedit'])->name('hrmbio_dataedit');
+
+Route::post('/hrm/bio_data/{update}', [HrmBackOfficeController::class, 'hrmbio_dataupdate'])->name('hrmbio_dataupdate');
+
+//end bio_data
+
+// Employee Working Shifts Change
+Route::get('/hrm/shift_change', [HrmBackOfficeController::class, 'shift_change'])->name('shift_change');
+Route::post('/hrm/shift_change', [HrmBackOfficeController::class, 'shift_change_list'])->name('shift_change_list');
+// Ajax
+Route::get('/Add/Policy/{policy}/{employee}', [HrmBackOfficeController::class, 'AddPolicy']);
+//End Employee Working Shifts Change
+
+//salary_info
+Route::get('/hrm/salary_info', [HrmBackOfficeController::class, 'hrmbacksalary_info'])->name('salary_info');
+//end salary_info
+
+//employee_clossing
+Route::get('/hrm/employee_clossing', [HrmBackOfficeController::class, 'hrmbackemployee_clossing'])->name('employee_clossing');
+Route::post('/hrm/employee_clossing', [HrmBackOfficeController::class, 'hrmemp_closingstore'])->name('hrmemp_closingstore');
+
+//employee_extension
+Route::get('/hrm/employee_extension', [HrmBackOfficeController::class, 'hrm_employee_extension'])->name('employee_extension');
+Route::post('/hrm/employee_extension', [HrmBackOfficeController::class, 'hrmemp_extensionstore'])->name('hrmemp_extensionstore');
+
+
+//end employee_clossing
+
+//attn_payroll_status
+Route::get('/hrm/attn_payroll_status', [HrmBackOfficeController::class, 'hrmbackattn_payroll_status'])->name('attn_payroll_status');
+//end attn_payroll_status
+
+//Own Password Change
+Route::get('/hrm/profile', [HrmBackOfficeController::class, 'EmpProfile'])->name('profile');
+Route::get('/hrm/changepass', [HrmBackOfficeController::class, 'ResetPass'])->name('changepass');
+Route::post('/hrm/changepass', [HrmBackOfficeController::class, 'ResetPassstore'])->name('ResetPassstore');
+
+
+//end attn_payroll_status
+
+//leave_type
+Route::get('/hrm/leave_type', [HrmBackOfficeController::class, 'hrmbackleave_type'])->name('leave_type');
+
+Route::post('/hrm/leave_type', [HrmBackOfficeController::class, 'hrmbackleave_typestore'])->name('hrmbackleave_typestore');
+
+Route::get('/hrm/leave_type/{id}', [HrmBackOfficeController::class, 'hrmbackleave_typeedit'])->name('hrmbackleave_typeedit');
+
+Route::post('/hrm/leave_type/{update}', [HrmBackOfficeController::class, 'hrmbackleave_typeupdate'])->name('hrmbackleave_typeupdate');
+
+//end leave_type
+
+//leave_config
+
+Route::get('/hrm/leave_config', [HrmBackOfficeController::class, 'hrmbackleave_config'])->name('leave_config');
+
+Route::post('/hrm/leave_config', [HrmBackOfficeController::class, 'hrmbackleave_configstore'])->name('hrmbackleave_configstore');
+
+Route::get('/hrm/leave_config/{id}', [HrmBackOfficeController::class, 'hrmbackleave_configedit'])->name('hrmbackleave_configedit');
+
+Route::post('/hrm/leave_config/{update}', [HrmBackOfficeController::class, 'hrmbackleave_configupdate'])->name('hrmbackleave_configupdate');
+
+//end leave_config
+
+//leave_application
+Route::get('/hrm/leave_application', [HrmBackOfficeController::class, 'hrmbackleave_application'])->name('leave_application');
+Route::post('/hrm/leave_application', [HrmBackOfficeController::class, 'hrmbackleave_applicationstore'])->name('hrmbackleave_applicationstore');
+Route::get('/hrm/leave_application/edit/{id}', [HrmBackOfficeController::class, 'HrmLleaveAppEdit'])->name('HrmLleaveAppEdit');
+Route::post('/hrm/leave_application/{update}', [HrmBackOfficeController::class, 'HrmLeaveAppUpdate'])->name('HrmLeaveAppUpdate');
+
+
+Route::get('/hrm/leave_application_op', [HrmBackOfficeController::class, 'HrmLeaveApplicationOp'])->name('leave_application_op');
+Route::post('/hrm/leave_application_op', [HrmBackOfficeController::class, 'HrmLeaveApplicationOpStore'])->name('HrmLeaveApplicationOpStore');
+
+//end leave_application
+
+//leave_approval
+Route::get('/hrm/leave_approval', [HrmBackOfficeController::class, 'hrmbackleave_approval'])->name('leave_approval');
+
+Route::get('/hrm/leave_app_for_approval/{id}', [HrmBackOfficeController::class, 'hrmleave_app_approval'])->name('hrmleave_app_approval');
+
+Route::post('/hrm/leave_app_for_approval/{update}', [HrmBackOfficeController::class, 'hrmleave_appupdate'])->name('hrmleave_appupdate');
+
+
+Route::get('/hrm/leave_approval_others', [HrmBackOfficeController::class, 'hrmbackleave_approval_others'])->name('leave_approval_others');
+Route::get('/hrm/leave_app_for_approval_other/{id}', [HrmBackOfficeController::class, 'hrmbackleave_app_for_approval_other'])->name('leave_app_for_approval_other');
+Route::post('/hrm/leave_app_for_approval_other_update/{update}', [HrmBackOfficeController::class, 'leave_app_for_approval_other_update'])->name('leave_app_for_approval_other_update');
+Route::get('/hrm/leave_app_for_approval_upload/{id}', [HrmBackOfficeController::class, 'leave_app_for_approval_upload'])->name('leave_app_for_approval_upload');
+
+Route::post('/hrm/leave_file_store/{id}', [HrmBackOfficeController::class, 'leave_file_store'])->name('leave_file_store');
+//end leave_approval
+
+//movement
+Route::get('/hrm/movement', [HrmBackOfficeController::class, 'hrmbackmovement'])->name('movement');
+Route::post('/hrm/movement', [HrmBackOfficeController::class, 'hrmlate_applicationstore'])->name('hrmlate_applicationstore');
+
+Route::get('/hrm/movement_application_op', [HrmBackOfficeController::class, 'HrmMoveApplicationOp'])->name('movement_application_op');
+Route::post('/hrm/movement_application_op', [HrmBackOfficeController::class, 'HrmMoveApplicationOpStore'])->name('HrmMoveApplicationOpStore');
+
+//end movement
+
+//movement_approval
+Route::get('/hrm/movement_approval', [HrmBackOfficeController::class, 'hrmmovement_approval'])->name('movement_approval');
+Route::get('/hrm/move_app_for_approval/{id}', [HrmBackOfficeController::class, 'hrmmove_app_approval'])->name('hrmmove_app_approval');
+Route::post('/hrm/move_app_for_approval/{update}', [HrmBackOfficeController::class, 'hrmmove_appupdate'])->name('hrmmove_appupdate');
+
+Route::get('/hrm/move_approval_others', [HrmBackOfficeController::class, 'HrmMoveApprovalOthers'])->name('move_approval_others');
+Route::get('/hrm/move_app_for_approval_other/{id}', [HrmBackOfficeController::class, 'hrmbackmove_app_for_approval_other'])->name('move_app_for_approval_other');
+Route::post('/hrm/move_app_for_approval_other_update/{update}', [HrmBackOfficeController::class, 'move_app_for_approval_other_update'])->name('move_app_for_approval_other_update');
+Route::get('/hrm/move_app_for_approval_upload/{id}', [HrmBackOfficeController::class, 'move_app_for_approval_upload'])->name('move_app_for_approval_upload');
+Route::post('/hrm/move_file_store/{id}', [HrmBackOfficeController::class, 'move_file_store'])->name('move_file_store');
+
+
+
+//end movement_approval
+
+//movement_approval manual
+Route::get('/hrm/move_appro_manual', [HrmBackOfficeController::class, 'MoveApproManual'])->name('move_appro_manual');
+Route::post('/hrm/move_appro_manual', [HrmBackOfficeController::class, 'MoveApproManualStore'])->name('MoveApproManualStore');
+
+
+//data_sync
+Route::get('/hrm/data_sync', [HrmBackOfficeController::class, 'hrmbackdata_sync'])->name('data_sync');
+
+Route::post('/hrm/data_sync', [HrmBackOfficeController::class, 'hrmbackdata_syncstore'])->name('hrmbackdata_syncstore');
+
+
+
+
+//end data_sync
+
+//attendance_process
+Route::get('/hrm/attendance_process', [HrmBackOfficeController::class, 'hrmbackattendance_process'])->name('attendance_process');
+
+Route::post('/hrm/attendance_process', [HrmBackOfficeController::class, 'hrmbackattendance_processstore'])->name('hrmbackattendance_processstore');
+
+Route::get('/hrm/attendance_process_02', [HrmBackOfficeController::class, 'HrmAttendanceProcess_02'])->name('attendance_process_02');
+
+Route::post('/hrm/attendance_process_02', [HrmBackOfficeController::class, 'HrmAttenProcessStore_02'])->name('HrmAttenProcessStore_02');
+
+//attendance_re_process
+Route::get('/hrm/attendance_re_process', [HrmBackOfficeController::class, 'hrmbackattendance_re_process'])->name('attendance_re_process');
+
+Route::post('/hrm/attendance_re_process', [HrmBackOfficeController::class, 'attendance_re_processstore'])->name('attendance_re_processstore');
+
+Route::get('/hrm/attendance_ind_process', [HrmBackOfficeController::class, 'hrmbackattendance_ind_process'])->name('attendance_ind_process');
+Route::post('/hrm/attendance_ind_process', [HrmBackOfficeController::class, 'attendance_ind_processstore'])->name('attendance_ind_processstore');
+
+
+
+//end attendance_process
+
+//leave_process
+Route::get('/hrm/leave_process', [HrmBackOfficeController::class, 'hrmbackleave_process'])->name('leave_process');
+Route::post('/hrm/leave_process', [HrmBackOfficeController::class, 'hrm_leave_process'])->name('hrm_leave_process');
+//end leave_process
+
+//movement_process
+Route::get('/hrm/movement_process', [HrmBackOfficeController::class, 'hrmbackmovement_process'])->name('movement_process');
+Route::post('/hrm/movement_process', [HrmBackOfficeController::class, 'hrm_movement_process'])->name('hrm_movement_process');
+//end movement_process
+
+//eatly_process
+Route::get('/hrm/early_process', [HrmBackOfficeController::class, 'HrmEarlyProcess'])->name('early_process');
+Route::post('/hrm/early_process', [HrmBackOfficeController::class, 'HrmEarlyProcessStore'])->name('HrmEarlyProcessStore');
+//end movement_process
+
+//summary_process
+Route::get('/hrm/summary_process', [HrmBackOfficeController::class, 'hrmbacksummary_process'])->name('summary_process');
+
+Route::post('/hrm/summary_process', [HrmBackOfficeController::class, 'hrmbacksummary_processstore'])->name('hrmbacksummary_processstore');
+
+
+//end summary_process
+
+//payroll_process
+Route::get('/hrm/payroll_process', [HrmBackOfficeController::class, 'hrmbackpayroll_process'])->name('payroll_process');
+//end payroll_process
+
+//summery_attendance report
+Route::get('/hrm/summary_attendance', [HrmBackOfficeController::class, 'hrmbacksummary_attendance'])->name('summary_attendance');
+Route::get('/hrm/summary_attn_posting', [HrmBackOfficeController::class, 'hrmsummary_attendance_posting'])->name('summary_attn_posting');
+
+Route::post('/hrm/summary_attendance', [HrmBackOfficeController::class, 'hrmbacksummary_attendance_report'])->name('hrmbacksummary_attendance_report');
+Route::post('/hrm/summary_attn_posting', [HrmBackOfficeController::class, 'HrmSummaryPostingAttnReport'])->name('HrmSummaryPostingAttnReport');
+
+Route::get('/hrm/summary_leave', [HrmBackOfficeController::class, 'hrmsummary_leave'])->name('summary_leave');
+Route::post('/hrm/summary_leave', [HrmBackOfficeController::class, 'hrmsummary_leave_report'])->name('hrmsummary_leave_report');
+
+//Data Query
+Route::get('/hrm/data_query', [HrmBackOfficeController::class, 'HrmDataQuery'])->name('data_query');
+Route::post('/hrm/data_query_list', [HrmBackOfficeController::class, 'HrmDataQueryList'])->name('HrmDataQueryList');
+
+//end summery_attendance
+
+//attendance report
+Route::get('/hrm/rpt_atten_ind', [HrmBackOfficeController::class, 'hrmattenind'])->name('rpt_atten_ind');
+Route::post('/hrm/rpt_atten_ind_show', [HrmBackOfficeController::class, 'hrmattenindrpt'])->name('hrmattenindrpt');
+Route::get('/hrm/rpt_atten_ind_print/{txt_month}/{cbo_employee_id}', [HrmBackOfficeController::class, 'HrmAttnIndReportPrint'])->name('HrmAttnIndReportPrint');
+
+
+
+//end attendance
+
+//employee_attendance report
+Route::get('/hrm/postingEmployee/{id}', [HrmBackOfficeController::class, 'postingEmployee'])->name('postingEmployee');
+
+Route::get('/hrm/postingEmployee1/{id}', [HrmBackOfficeController::class, 'postingEmployee1'])->name('postingEmployee1');
+
+
+
+Route::get('/hrm/employee_attendance', [HrmBackOfficeController::class, 'hrmbackemployee_attendance'])->name('employee_attendance');
+Route::post('/hrm/emp_attn_report', [HrmBackOfficeController::class, 'hrmbackemp_attn_report'])->name('hrmbackemp_attn_report');
+Route::get('/hrm/hrmbackemp_attn_report_print/{txt_month}/{cbo_employee_id}', [HrmBackOfficeController::class, 'hrmbackemp_attn_report_print'])->name('hrmbackemp_attn_report_print');
+
+//end employee_attendance
+
+//employee punch report
+Route::get('/hrm/daily_punch', [HrmBackOfficeController::class, 'hrmbackdaily_punch'])->name('daily_punch');
+Route::post('/hrm/emp_punch_report', [HrmBackOfficeController::class, 'hrmbackdaily_punch_report'])->name('hrmbackdaily_punch_report');
+
+//end employee punch report
+
+//data split 
+Route::get('/hrm/data_split', [HrmBackOfficeController::class, 'HrmDataSplit'])->name('data_split');
+Route::post('/hrm/data_split', [HrmBackOfficeController::class, 'HrmDataSplitStore'])->name('HrmDataSplitStore');
+
+
+//employee atten aaa report
+Route::get('/hrm/rpt_atten_date_range', [HrmBackOfficeController::class, 'hrmAttenAaa'])->name('rpt_atten_date_range');
+Route::post('/hrm/date_range_atten_report', [HrmBackOfficeController::class, 'hrmAaaReport'])->name('hrmAaaReport');
+
+//end employee punch report
+
+
+//leave_application_list
+Route::get('/hrm/leave_application_list', [HrmBackOfficeController::class, 'hrmbackleave_application_list'])->name('leave_application_list');
+//end leave_application_list
+
+//Report Employee List
+Route::get('/hrm/rpt_basic_info_list', [HrmBackOfficeController::class, 'RptEmpList'])->name('rpt_basic_info_list');
+Route::get('/hrm/rpt_basic_info_list_all', [HrmBackOfficeController::class, 'RptEmpListAll'])->name('rpt_basic_info_list_all');
+
+//end Report Employee List
+
+//end HRM Backoffice
+//IT INVENTORY
+Route::get('/itinventory', [App\Http\Controllers\ModuleController::class, 'itinventory'])->name('itinventory');
+
+//IT INVENTORY Backoffice
+//Supplier
+Route::get('/itinventory/supplier_info', [ITBackOfficeController::class, 'itsupp'])->name('supplier_info');
+Route::post('/itinventory/supplier_info', [ITBackOfficeController::class, 'supplier_info_store'])->name('supplier_info_store');
+Route::get('/itinventory/supplier_info/{id}', [ITBackOfficeController::class, 'supplier_infoedit'])->name('supplier_infoedit');
+Route::post('/itinventory/supplier_info/{update}', [ITBackOfficeController::class, 'itsupplier_infoupdate'])->name('itsupplier_infoupdate');
+
+//Product Type
+Route::get('/itinventory/product_type', [ITBackOfficeController::class, 'itproduct_type'])->name('product_type');
+Route::post('/itinventory/product_type', [ITBackOfficeController::class, 'itproduct_type_store'])->name('itproduct_type_store');
+Route::get('/itinventory/product_type/{id}', [ITBackOfficeController::class, 'itproduct_typeedit'])->name('itproduct_typeedit');
+Route::post('/itinventory/product_type/{update}', [ITBackOfficeController::class, 'itproduct_typeupdate'])->name('itproduct_typeupdate');
+
+//Brand
+Route::get('/itinventory/brand', [ITBackOfficeController::class, 'itbrand'])->name('brand');
+Route::post('/itinventory/brand', [ITBackOfficeController::class, 'itbrand_store'])->name('itbrand_store');
+Route::get('/itinventory/brand/{id}', [ITBackOfficeController::class, 'itbrandedit'])->name('itbrandedit');
+Route::post('/itinventory/brand/{update}', [ITBackOfficeController::class, 'itbrandupdate'])->name('itbrandupdate');
+
+//Processor
+Route::get('/itinventory/processor', [ITBackOfficeController::class, 'itprocessor'])->name('processor');
+Route::post('/itinventory/processor', [ITBackOfficeController::class, 'itprocessor_store'])->name('itprocessor_store');
+Route::get('/itinventory/processor/{id}', [ITBackOfficeController::class, 'itprocessoredit'])->name('itprocessoredit');
+Route::post('/itinventory/processor/{update}', [ITBackOfficeController::class, 'itprocessorupdate'])->name('itprocessorupdate');
+
+//Asset
+Route::get('/itinventory/it_asset', [ITBackOfficeController::class, 'itasset'])->name('it_asset');
+Route::post('/itinventory/it_asset', [ITBackOfficeController::class, 'itasset_store'])->name('itasset_store');
+Route::get('/itinventory/it_asset/edit/{id}', [ITBackOfficeController::class, 'it_assetedit'])->name('it_assetedit');
+Route::post('/itinventory/it_asset/{update}', [ITBackOfficeController::class, 'it_assetupdate'])->name('it_assetupdate');
+
+Route::get('/itinventory/it_asset_issue', [ITBackOfficeController::class, 'ItAssetIssue'])->name('it_asset_issue');
+Route::post('/itinventory/it_asset_issue', [ITBackOfficeController::class, 'ItAssetIssueStore'])->name('ItAssetIssueStore');
+Route::get('/itinventory/it_asset_issue/edit/{id}', [ITBackOfficeController::class, 'ItAssetIssueEdit'])->name('ItAssetIssueEdit');
+Route::post('/itinventory/it_asset_issue/{update}', [ITBackOfficeController::class, 'ItAssetIssueUpdate'])->name('ItAssetIssueUpdate');
+
+
+Route::get('/itinventory/it_asset_return', [ITBackOfficeController::class, 'ItAssetReturn'])->name('it_asset_return');
+Route::post('/itinventory/it_asset_return', [ITBackOfficeController::class, 'ItAssetReturnStore'])->name('ItAssetReturnStore');
+
+Route::get('/itinventory/it_asset_received', [ITBackOfficeController::class, 'ItAssetReceived'])->name('it_asset_received');
+Route::post('/itinventory/it_asset_received', [ITBackOfficeController::class, 'ItAssetReceivedStore'])->name('ItAssetReceivedStore');
+Route::get('/itinventory/it_asset_received_details/{id}', [ITBackOfficeController::class, 'ItAssetReceivedDetails'])->name('ItAssetReceivedDetails');
+
+
+// Route::get('/inventory/material_req_details/{id}/{id2}', [InventoryController::class, 'inventory_material_req_details'])->name('inventory_material_req_details');
+// Route::post('/inventory/material_req_details_store/{id2}', [InventoryController::class, 'inventory_material_req_details_store'])->name('inventory_material_req_details_store');
+
+
+
+
+
+Route::get('/itinventory/ip_mac_info', [ITBackOfficeController::class, 'IpMacInfo'])->name('ip_mac_info');
+Route::post('/itinventory/ip_mac_info', [ITBackOfficeController::class, 'ItIpMacStore'])->name('ItIpMacStore');
+Route::get('/itinventory/ip_mac_info/edit/{id}', [ITBackOfficeController::class, 'ItIpMacEdit'])->name('ItIpMacEdit');
+Route::post('/itinventory/ip_mac_info/{update}', [ITBackOfficeController::class, 'ItIpMacUpdate'])->name('ItIpMacUpdate');
+
+
+Route::get('get/ip_mac_list', [ITBackOfficeController::class, 'GetIPMacList']);
+
+Route::get('/itinventory/rpt_it_asset', [ITBackOfficeController::class, 'RptItAsset'])->name('rpt_it_asset');
+Route::post('/itinventory/rpt_it_asset_list', [ITBackOfficeController::class, 'RptItAssetList'])->name('RptItAssetList');
+
+//end of IT Inventory
+
+//Deed
+Route::get('/deed', [App\Http\Controllers\ModuleController::class, 'deed'])->name('deed');
+//Deed Backoffice
+//Land Owner
+Route::get('/deed/land_owner_info', [DeedController::class, 'DeedLandOwnerInfo'])->name('land_owner_info');
+Route::post('/deed/land_owner_info', [DeedController::class, 'DeedLandOwnerInfoStore'])->name('DeedLandOwnerInfoStore');
+Route::get('/deed/land_owner_info/{id}', [DeedController::class, 'DeedLandOwnerInfoEdit'])->name('DeedLandOwnerInfoEdit');
+Route::post('/deed/land_owner_info/{update}', [DeedController::class, 'DeedLandOwnerInfoUpdate'])->name('DeedLandOwnerInfoUpdate');
+
+
+//Thana / Upazila 
+Route::get('/deed/thana_info', [DeedController::class, 'DeedThanaInfo'])->name('thana_info');
+Route::post('/deed/thana_info', [DeedController::class, 'DeedThanaInfoStore'])->name('DeedThanaInfoStore');
+Route::get('/deed/thana_info/{id}', [DeedController::class, 'DeedUpzilaEdit'])->name('DeedUpzilaEdit');
+Route::post('/deed/thana_info/{update}', [DeedController::class, 'DeedUpzilaUpdate'])->name('DeedUpzilaUpdate');
+
+//Mouja 
+Route::get('/deed/mouja_info', [DeedController::class, 'DeedMoujaInfo'])->name('mouja_info');
+Route::post('/deed/mouja_info', [DeedController::class, 'DeedMoujaInfoStore'])->name('DeedMoujaInfoStore');
+Route::get('/deed/mouja_info/{id}', [DeedController::class, 'DeedMoujaEdit'])->name('DeedMoujaEdit');
+Route::post('/deed/mouja_info/{update}', [DeedController::class, 'DeedMoujaInfoUpdate'])->name('DeedMoujaInfoUpdate');
+
+//Union 
+Route::get('/deed/union_info', [DeedController::class, 'DeedUnionInfo'])->name('union_info');
+Route::post('/deed/union_info', [DeedController::class, 'DeedUnionInfoStore'])->name('DeedUnionInfoStore');
+// Route::get('/deed/union_info/{id}', [DeedController::class, 'DeedUnionEdit'])->name('DeedUnionEdit');
+// Route::post('/deed/union_info/{update}', [DeedController::class, 'DeedUnionInfoUpdate'])->name('DeedUnionInfoUpdate');
+
+
+//Doc Info
+Route::get('deed/doc_info', [DeedController::class, 'DeedDocInfo'])->name('doc_info');
+Route::post('deed/doc_info/store', [DeedController::class, 'DeedDocInfoStore'])->name('DeedDocInfoStore');
+Route::get('/deed/doc_info/{id}', [DeedController::class, 'DeedDocInfoEdit'])->name('DeedDocInfoEdit');
+Route::post('/deed/doc_info/{update}', [DeedController::class, 'DeedDocInfoUpdate'])->name('DeedDocInfoUpdate');
+
+
+
+//Deed Entry
+Route::get('/deed/deed_master_info', [DeedController::class, 'DeedMasterInfo'])->name('deed_master_info');
+Route::post('deed/master_info/store', [DeedController::class, 'DeedMasterInfoStore'])->name('DeedMasterInfoStore');
+Route::get('deed/master_info/en/{id}', [DeedController::class, 'DeedMasterInfoEnglish'])->name('DeedMasterInfoEnglish');
+Route::get('deed/master_info/en/print/{id}', [DeedController::class, 'DeedMasterInfoEnPrint'])->name('DeedMasterInfoEnPrint');
+Route::get('deed/master_info/bn/{id}', [DeedController::class, 'DeedMasterInfoBangla'])->name('DeedMasterInfoBangla');
+Route::get('deed/master_info/bn/print/{id}', [DeedController::class, 'DeedMasterInfoBnPrint'])->name('DeedMasterInfoBnPrint');
+
+//Deed Entry Edit
+Route::get('/deed/deed_master_info/edit/{id}', [DeedController::class, 'DeedMasterInfoEdit'])->name('DeedMasterInfoEdit');
+Route::get('/deed/land_owner/edit/{id}', [DeedController::class, 'DeedLandOwnerEdit'])->name('DeedLandOwnerEdit');
+Route::post('/deed/deed_master_info/update', [DeedController::class, 'DeedMasterInfoUpdate'])->name('DeedMasterInfoUpdate');
+
+//End Deed Entry Edit
+
+//Deed owner
+Route::get('deed/land_owner/{id}', [DeedController::class, 'DeedLandOwner'])->name('DeedLandOwner');
+Route::post('deed/land_owner/store', [DeedController::class, 'DeedLandOwnerStore'])->name('DeedLandOwnerStore');
+
+//Deed land Seller
+Route::get('deed/land_seller_info/{id}', [DeedController::class, 'DeedLandSellerInfo'])->name('DeedLandSellerInfo');
+Route::post('deed/land_seller_info/store', [DeedController::class, 'DeedLandSellerInfoStore'])->name('DeedLandSellerInfoStore');
+//Deed land Seller next
+Route::get('deed/land_seller_info/next/{id}', [DeedController::class, 'DeedLandSellerInfoNext'])->name('DeedLandSellerInfoNext');
+Route::post('deed/land_seller_info/update', [DeedController::class, 'DeedLandSellerInfoUpdate'])->name('DeedLandSellerInfoStore2');
+
+//tapsil info
+Route::get('deed/tapsil_info/{id}', [DeedController::class, 'DeedTapsilInfo'])->name('DeedTapsilInfo');
+Route::post('deed/tapsil_info/store', [DeedController::class, 'DeedTapsilInfoStore'])->name('DeedTapsilInfoStore');
+
+//namjari info
+Route::get('deed/namjari/{id}', [DeedController::class, 'DeedNamjari'])->name('DeedNamjari');
+Route::post('deed/namjari/store', [DeedController::class, 'DeedNamjariStore'])->name('DeedNamjariStore');
+
+//End Deed
+
+
+//Doc file
+Route::get('/deed/doc_upload_list', [DeedController::class, 'DeedDocUploadList'])->name('doc_upload_list');
+Route::get('deed/doc_upload_list/{id}', [DeedController::class, 'DeedDocFile'])->name('doc_file');
+Route::post('deed/doc_upload_list/store', [DeedController::class, 'DeedDocFileStore'])->name('DeedDocFileStore');
+
+//Deed Report
+Route::get('/deed/rpt_deed_list', [DeedController::class, 'DeedRptList'])->name('rpt_deed_list');
+
+
+Route::get('/finance', [App\Http\Controllers\ModuleController::class, 'finance'])->name('finance');
+
+//Bank
+Route::get('/finance/bank', [FinanceController::class, 'finance_bank'])->name('bank');
+Route::post('/finance/bank', [FinanceController::class, 'bank_store'])->name('bank_store');
+Route::get('/finance/bank/edit/{id}', [FinanceController::class, 'bank_edit'])->name('bank_edit');
+Route::post('/finance/bank-up', [FinanceController::class, 'bank_update'])->name('bank_update');
+
+
+//Bank Branch
+Route::get('/finance/bank_branch', [FinanceController::class, 'finance_bank_branch'])->name('bank_branch');
+Route::post('/finance/bank_branch', [FinanceController::class, 'bank_branch_store'])->name('bank_branch_store');
+Route::get('/finance/bank_branch/edit/{id}', [FinanceController::class, 'bank_branch_edit'])->name('bank_branch_edit');
+Route::post('/finance/bank_branch-up', [FinanceController::class, 'bank_branch_update'])->name('bank_branch_update');
+
+//Bank Branch
+Route::get('/finance/bank_details', [FinanceController::class, 'finance_bank_details'])->name('bank_details');
+Route::post('/finance/bank_details', [FinanceController::class, 'bank_details_store'])->name('bank_details_store');
+Route::get('/finance/bank_details/edit/{id}', [FinanceController::class, 'bank_details_edit'])->name('bank_details_edit');
+Route::post('/finance/bank_details_up', [FinanceController::class, 'bank_details_update'])->name('bank_details_update');
+
+//Bank Account
+Route::get('/finance/bank_accounts', [FinanceController::class, 'finance_bank_accounts'])->name('bank_accounts');
+Route::post('/finance/bank_accounts', [FinanceController::class, 'bank_accounts_store'])->name('bank_accounts_store');
+Route::get('/finance/bank_accounts/edit/{id}', [FinanceController::class, 'bank_accounts_edit'])->name('bank_accounts_edit');
+Route::post('/finance/bank_accounts_up', [FinanceController::class, 'bank_accounts_update'])->name('bank_accounts_update');
+
+//Create Cheque
+Route::get('/finance/create_cheque', [FinanceController::class, 'finance_create_cheque'])->name('create_cheque');
+Route::post('/finance/create_cheque', [FinanceController::class, 'finance_cheque_store'])->name('finance_cheque_store');
+
+//Cheque Issue
+Route::get('/finance/cheque_issue', [FinanceController::class, 'finance_cheque_issue'])->name('cheque_issue');
+Route::post('/finance/cheque_issue', [FinanceController::class, 'finance_cheque_issue_store'])->name('finance_cheque_issue_store');
+Route::get('/finance/cheque_issue/edit/{id}', [FinanceController::class, 'cheque_issue_edit'])->name('cheque_issue_edit');
+Route::post('/finance/cheque_issue_up', [FinanceController::class, 'cheque_issue_update'])->name('cheque_issue_update');
+
+
+//FDR Information
+Route::get('/finance/fdr_info', [FinanceController::class, 'fdr_info'])->name('fdr_info');
+Route::post('/finance/fdr_info_store', [FinanceController::class, 'fdr_info_store'])->name('fdr_info_store');
+Route::get('/get/finance/fdr_employee_name/{id}', [FinanceController::class, 'fdr_employee_name']);
+
+//edit FDR Information
+Route::get('/finance/fdr_info_edit/{id}', [FinanceController::class, 'fdr_info_edit'])->name('fdr_info_edit');
+Route::post('/finance/fdr_info_update/{id}', [FinanceController::class, 'fdr_info_update'])->name('fdr_info_update');
+
+//closing and Renew 
+Route::get('/finance/closing_renew_list', [FinanceController::class, 'closing_renew_list'])->name('closing_renew_list');
+Route::get('/finance/fdr_closing/{id}', [FinanceController::class, 'fdr_closing'])->name('fdr_closing');
+Route::post('/finance/fdr_closing_update/{id}', [FinanceController::class, 'fdr_closing_update'])->name('fdr_closing_update');
+Route::get('/finance/fdr_renew/{id}', [FinanceController::class, 'fdr_renew'])->name('fdr_renew');
+Route::post('/finance/fdr_renew_update/{id}', [FinanceController::class, 'fdr_renew_update'])->name('fdr_renew_update');
+
+//BG/PG Information
+Route::get('/finance/bg_pg_info', [FinanceController::class, 'bg_pg_info'])->name('bg_pg_info');
+Route::post('/finance/bg_pg_info_store', [FinanceController::class, 'bg_pg_info_store'])->name('bg_pg_info_store');
+Route::get('/finance/bg_pg_info_edit/{id}', [FinanceController::class, 'bg_pg_info_edit'])->name('bg_pg_info_edit');
+Route::post('/finance/bg_pg_info_update/{id}', [FinanceController::class, 'bg_pg_info_update'])->name('bg_pg_info_update');
+
+Route::get('/get/finance/bg_pg_reff_name/{id}', [FinanceController::class, 'bg_pg_reff_name']);
+
+// finance report / alart list
+//cheque
+Route::get('/finance/rpt_cheque_issue', [FinanceController::class, 'RptChequeIssue'])->name('rpt_cheque_issue');
+Route::post('/finance/rpt_cheque_issue_list', [FinanceController::class, 'RptChequeIssueList'])->name('RptChequeIssueList');
+
+// Route::post('/hrm/emp_attn_report', [HrmBackOfficeController::class, 'hrmbackemp_attn_report'])->name('hrmbackemp_attn_report');
+
+
+
+Route::get('/finance/rpt_fdr_bgpg', [FinanceController::class, 'rpt_fdr_bgpg'])->name('rpt_fdr_bgpg');
+Route::post('/finance/rpt_fdr_bgpg_list', [FinanceController::class, 'rpt_fdr_bgpg_list'])->name('rpt_fdr_bgpg_list');
+
+
+
+
+//end of Finance
+
+//---------Purchase--------------------
+Route::get('/purchase', [App\Http\Controllers\ModuleController::class, 'purchase'])->name('purchase');
+
+//---------Purchase----------------------------
+
+//project Name
+Route::get('/purchase/project_name', [PurchaseController::class, 'ProjectName'])->name('project_name');
+Route::post('/purchase/project_name_store', [PurchaseController::class, 'project_name_store'])->name('project_name_store');
+Route::get('/purchase/project_name_edit/{id}', [PurchaseController::class, 'project_name_edit'])->name('project_name_edit');
+Route::post('/purchase/project_name_update/{id}', [PurchaseController::class, 'project_name_update'])->name('project_name_update');
+
+//Indent Category
+Route::get('/purchase/indent_category', [PurchaseController::class, 'IndentCategory'])->name('indent_category');
+Route::post('/purchase/indent_category_store', [PurchaseController::class, 'indent_category_store'])->name('indent_category_store');
+Route::get('/purchase/indent_category_edit/{id}', [PurchaseController::class, 'indent_category_edit'])->name('indent_category_edit');
+Route::post('/purchase/indent_category_update/{id}', [PurchaseController::class, 'indent_category_update'])->name('indent_category_update');
+
+//indent
+Route::get('/purchase/indent_info', [PurchaseController::class, 'PurchaseIndent'])->name('indent_info');
+Route::post('/purchase/indent_store', [PurchaseController::class, 'purchase_indent_store'])->name('purchase_indent_store');
+Route::get('/purchase/indent_edit/{id}/{id2}', [PurchaseController::class, 'purchase_indent_edit'])->name('purchase_indent_edit');
+Route::get('/purchase/indent_update/{id}/{id2}', [PurchaseController::class, 'purchase_indent_update'])->name('purchase_indent_update');
+Route::post('/purchase/indent_update2/{id}/{id2}', [PurchaseController::class, 'purchase_indent_update2'])->name('purchase_indent_update2');
+Route::post('/purchase/indent_add_another', [PurchaseController::class, 'purchase_indent_add_another'])->name('purchase_indent_add_another');
+Route::get('/purchase/indent_final/{id}/{id2}', [PurchaseController::class, 'purchase_indent_final'])->name('purchase_indent_final');
+//apprroval
+Route::get('/purchase/indent_list_for_approval', [PurchaseController::class, 'purchase_indent_list_for_approval'])->name('indent_list_for_approval');
+Route::post('/purchase/company_wise_indent_approval', [PurchaseController::class, 'company_wise_indent_approval'])->name('company_wise_indent_approval');
+Route::get('/purchase/indent_approval/{id}/{id2}', [PurchaseController::class, 'purchase_indent_approval'])->name('purchase_indent_approval');
+Route::post('/purchase/indent_approval_ok/{id}/{id2}', [PurchaseController::class, 'purchase_indent_approval_ok'])->name('purchase_indent_approval_ok');
+//report
+Route::get('/purchase/indent_list_report', [PurchaseController::class, 'purchase_indent_list_report'])->name('indent_list_report');
+Route::get('/purchase/indent_view_print/{id}/{id2}', [PurchaseController::class, 'purchase_indent_view_print'])->name('purchase_indent_view_print');
+
+Route::post('/purchase/company_wise_indent_report', [PurchaseController::class, 'company_wise_indent_report'])->name('company_wise_indent_report');
+
+Route::get('/purchase/company_wise_indent_report2/{company}/{date1}/{date2}', [PurchaseController::class, 'company_wise_indent_report2'])->name('company_wise_indent_report2');
+
+Route::get('/purchase/indent_view/{id}/{id2}', [PurchaseController::class, 'purchase_indent_view'])->name('purchase_indent_view');
+Route::get('/purchase/rpt_indent_excel/{id}/{id2}', [PurchaseController::class, 'RPTIndentExcel'])->name('rpt_indent_excel');
+
+
+// rr closing stock price
+Route::get('/purchase/closing_stock_price', [PurchaseController::class, 'closing_stock_price'])->name('closing_stock_price');
+Route::post('/purchase/closing_stock_price_details', [PurchaseController::class, 'closing_stock_price_details'])->name('closing_stock_price_details');
+Route::get('/purchase/closing_stock_price_details/edit/{project_id}/{pg_id}/{pg_sub_id}/{id2}', [PurchaseController::class, 'closing_stock_price_details_edit'])->name('closing_stock_price_details_edit');
+Route::post('/purchase/closing_stock_price_details/update/{id}/{id2}', [PurchaseController::class, 'closing_stock_price_details_update'])->name('closing_stock_price_details_update');
+
+//material rr price 
+Route::get('/purchase/rr_price_list', [PurchaseController::class, 'purchase_rr_price_list'])->name('rr_price_list');
+Route::post('/purchase/company_wise_rr_price', [PurchaseController::class, 'company_wise_rr_price'])->name('company_wise_rr_price');
+Route::get('/purchase/material_price/{id}/{id2}', [PurchaseController::class, 'purchase_material_price'])->name('material_price');
+Route::post('/purchase/material_price/update/{id}/{id2}', [PurchaseController::class, 'purchase_material_price_update'])->name('material_price_update');
+
+//rpt material rr price  
+Route::get('/purchase/rpt_rr_price_list', [PurchaseController::class, 'rpt_rr_price_list'])->name('rpt_rr_price_list');
+Route::post('/purchase/company_wise_rr_price_list', [PurchaseController::class, 'company_wise_rr_price_list'])->name('company_wise_rr_price_list');
+Route::get('/purchase/rpt_rr_price_list_view/{id}/{id2}', [PurchaseController::class, 'rpt_rr_price_list_view'])->name('rpt_rr_price_list_view');
+Route::get('/purchase/rpt_rr_price_list_print/{id}/{id2}', [PurchaseController::class, 'rpt_rr_price_list_print'])->name('rpt_rr_price_list_print');
+
+
+//------------------End Purchase------------------
+
+
+
+//---------------Inventory------------------------------------
+Route::get('/inventory', [App\Http\Controllers\ModuleController::class, 'inventory'])->name('inventory');
+
+//Product Group
+Route::get('/inventory/product_group', [App\Http\Controllers\InventoryController::class, 'inventoryproductgroup'])->name('product_group');
+Route::post('/inventory/product_group', [App\Http\Controllers\InventoryController::class, 'inventorypgstore'])->name('inventorypgstore');
+Route::get('/inventory/product_group/edit/{id}', [App\Http\Controllers\InventoryController::class, 'inventorypgedit'])->name('inventorypgedit');
+Route::post('/inventory/product_group/{update}', [App\Http\Controllers\InventoryController::class, 'inventorypgupdate'])->name('inventorypgupdate');
+
+//Product Sub Group
+Route::get('/inventory/product_sub_group', [App\Http\Controllers\InventoryController::class, 'inventoryproductsubgroup'])->name('product_sub_group');
+Route::post('/inventory/product_sub_group', [App\Http\Controllers\InventoryController::class, 'inventorypgsubstore'])->name('inventorypgsubstore');
+Route::get('/inventory/product_sub_group/edit/{id}', [App\Http\Controllers\InventoryController::class, 'inventorypgsubedit'])->name('inventorypgsubedit');
+Route::post('/inventory/product_sub_group/{update}', [App\Http\Controllers\InventoryController::class, 'inventorypgsubupdate'])->name('inventorypgsubupdate');
+
+
+
+//Product
+Route::get('/inventory/product', [App\Http\Controllers\InventoryController::class, 'inventoryproduct'])->name('product');
+Route::post('/inventory/product', [App\Http\Controllers\InventoryController::class, 'inventoryproductstore'])->name('inventoryproductstore');
+Route::get('/inventory/product/edit/{id}', [App\Http\Controllers\InventoryController::class, 'inventoryproductedit'])->name('inventoryproductedit');
+Route::post('/inventory/product/{update}', [App\Http\Controllers\InventoryController::class, 'inventoryproductupdate'])->name('inventoryproductupdate');
+//end Inventory 
+Route::get('get/product_info', [InventoryController::class, 'GetProduct']);
+
+
+//Unit
+Route::get('/inventory/product_unit', [App\Http\Controllers\InventoryController::class, 'productunit'])->name('product_unit');
+Route::post('/inventory/product_unit', [App\Http\Controllers\InventoryController::class, 'unitstore'])->name('unitstore');
+Route::get('/inventory/product_unit/edit/{id}', [App\Http\Controllers\InventoryController::class, 'prounitedit'])->name('prounitedit');
+Route::post('/inventory/product_unit/{update}', [App\Http\Controllers\InventoryController::class, 'prounitupdate'])->name('prounitupdate');
+
+//supplier information
+Route::get('/inventory/supplier_information', [App\Http\Controllers\InventoryController::class, 'supplierinfo'])->name('supplier_information');
+Route::post('/inventory/supplier_info', [App\Http\Controllers\InventoryController::class, 'supplierinfostore'])->name('inventorysupplierinfostore');
+Route::get('/inventory/supplier_info/edit/{id}', [App\Http\Controllers\InventoryController::class, 'supplierinfoedit'])->name('inventorysupplierinfoedit');
+Route::post('/inventory/supplier_info/{update}', [App\Http\Controllers\InventoryController::class, 'supplierinfoupdate'])->name('inventorysupplierinfoupdate');
+
+Route::get('get/supply_info', [InventoryController::class, 'GetSupplier']);
+
+
+//Indent list RR
+Route::get('/inventory/indent_list_for_rr', [InventoryController::class, 'InventoryIndentListRR'])->name('indent_list_for_rr');
+Route::post('/inventory/company_wise_list_for_rr', [InventoryController::class, 'company_wise_list_for_rr'])->name('company_wise_list_for_rr');
+Route::get('/inventory/indent_receiving_report/{id}/{id2}', [InventoryController::class, 'inventory_indent_receiving_report'])->name('inventory_indent_receiving_report');
+Route::post('/inventory/indent_receiving_report_store/{id2}', [InventoryController::class, 'inventory_indent_receiving_report_store'])->name('inventory_indent_receiving_report_store');
+Route::get('/inventory/receiving_report_details/{id}/{id2}', [InventoryController::class, 'inventory_receiving_report_details'])->name('inventory_receiving_report_details');
+Route::post('/inventory/indent_report_receiving/{id2}', [InventoryController::class, 'inventory_indent_report_receiving'])->name('inventory_indent_report_receiving');
+Route::get('/inventory/receiving_report_final/{id}/{id2}', [InventoryController::class, 'inventory_receiving_report_final'])->name('inventory_receiving_report_final');
+
+//edit
+Route::get('/inventory_receiving_report_edit/{id}/{id2}', [InventoryController::class, 'inventory_receiving_report_edit'])->name('inventory_receiving_report_edit');
+Route::post('/inventory_receiving_report_update/{id}/{id2}', [InventoryController::class, 'inventory_receiving_report_update'])->name('inventory_receiving_report_update');
+
+//RPT
+Route::get('/inventory/rpt_rr_list', [InventoryController::class, 'RPTRRList'])->name('rpt_rr_list');
+Route::get('/inventory/rpt_rr_list_details/{grr_master_id}/{company_id}', [InventoryController::class, 'RPTRRListView'])->name('rpt_rr_list_details');
+Route::get('/inventory/rpt_rr_list_print/{grr_master_id}/{company_id}', [InventoryController::class, 'RPTRRListPrint'])->name('rpt_rr_list_print');
+Route::get('/inventory/rpt_rr_excel/{grr_no}/{company_id}', [InventoryController::class, 'RPTRRExcel'])->name('rpt_rr_excel');
+//End Indent list RR
+
+//Material Requsition
+Route::get('inventory/material_requsition_info', [InventoryController::class, 'material_requsition_info'])->name('material_requsition_info');
+Route::post('/inventory/material_req_store', [InventoryController::class, 'inventory_material_req_store'])->name('inventory_material_req_store');
+Route::get('/inventory/material_req_details/{id}/{id2}', [InventoryController::class, 'inventory_material_req_details'])->name('inventory_material_req_details');
+Route::post('/inventory/material_req_details_store/{id2}', [InventoryController::class, 'inventory_material_req_details_store'])->name('inventory_material_req_details_store');
+Route::get('/inventory/material_req_details_final/{id}/{id2}', [InventoryController::class, 'inventory_material_req_details_final'])->name('inventory_material_req_details_final');
+//edit
+Route::get('/inventory/material_req_details_edit/{id}/{id2}', [InventoryController::class, 'inventory_material_req_details_edit'])->name('inventory_material_req_details_edit');
+Route::post('/inventory/material_req_details_update/{id}/{id2}', [InventoryController::class, 'inventory_material_req_details_update'])->name('inventory_material_req_details_update');
+
+//MR Approval 
+Route::get('/inventory/material_requsition_approval_list', [InventoryController::class, 'material_requsition_approval_list'])->name('material_requsition_approval_list');
+Route::post('/inventory/company_wise_material_requsition_approval_list', [InventoryController::class, 'company_wise_material_requsition_approval_list'])->name('company_wise_material_requsition_approval_list');
+Route::get('/inventory/material_req_approval/{id}/{company_id}', [InventoryController::class, 'inventory_material_req_approval'])->name('inventory_material_req_approval');
+Route::post('/inventory/material_req_approval_ok/{id}/{company_id}', [InventoryController::class, 'inventory_material_req_approval_ok'])->name('inventory_material_req_approval_ok');
+
+//RPT
+Route::get('/inventory/rpt_requsition_list', [InventoryController::class, 'RPTRequsitionList'])->name('rpt_requsition_list');
+Route::get('/inventory/rpt_requsition_details/{mrm_no}/{company_id}', [InventoryController::class, 'RPTRequsitionView'])->name('rpt_requsition_details');
+Route::get('/inventory/rpt_requsition_print/{mrm_no}/{company_id}', [InventoryController::class, 'RPTRequsitionPrint'])->name('rpt_requsition_print');
+Route::get('/inventory/rpt_requsition_excel/{mrm_no}/{company_id}', [InventoryController::class, 'RPTRequsitionExcel'])->name('rpt_requsition_excel');
+
+//End Material Requsition
+
+//Material Issue
+Route::get('inventory/requsition_list_for_issue', [InventoryController::class, 'InventoryRequsitionListForIssue'])->name('requsition_list_for_issue');
+Route::post('inventory/company_wise_requsition_list_for_issue', [InventoryController::class, 'company_wise_requsition_list_for_issue'])->name('company_wise_requsition_list_for_issue');
+Route::get('/inventory/req_material_issue/{id}/{company_id}', [InventoryController::class, 'inventory_req_material_issue'])->name('inventory_req_material_issue');
+Route::post('/inventory/req_material_issue_store/{company_id}', [InventoryController::class, 'inventory_req_material_issue_store'])->name('inventory_req_material_issue_store');
+Route::get('/inventory/req_material_issue_details/{id}/{company_id}', [InventoryController::class, 'inventory_req_material_issue_details'])->name('inventory_req_material_issue_details');
+Route::post('/inventory/req_material_issue_details_store/{company_id}', [InventoryController::class, 'inventory_req_material_issue_details_store'])->name('inventory_req_material_issue_details_store');
+Route::get('/inventory/req_material_issue_details_final/{id}/{company_id}', [InventoryController::class, 'inventory_req_material_issue_details_final'])->name('inventory_req_material_issue_details_final');
+//  edit 
+Route::get('/inventory/req_material_issue_edit/{rid_id}/{company_id}', [InventoryController::class, 'inventory_req_material_issue_edit'])->name('req_material_issue_edit');
+Route::post('/inventory/req_material_issue_update/{rid_id}/{company_id}', [InventoryController::class, 'inventory_req_material_issue_details_update'])->name('req_material_issue_update');
+
+//RPT
+Route::get('/inventory/rpt_issue_list', [InventoryController::class, 'RPTRequsitionIssueList'])->name('rpt_issue_list');
+Route::get('/inventory/rpt_requsition_issue_details/{rim_no}/{company_id}', [InventoryController::class, 'RPTRequsitionIssueView'])->name('rpt_requsition_issue_details');
+Route::get('/inventory/rpt_requsition_issue_print/{rim_no}/{company_id}', [InventoryController::class, 'RPTRequsitionIssuePrint'])->name('rpt_requsition_issue_print');
+Route::get('/inventory/rpt_issue_excel/{rim_no}/{company_id}', [InventoryController::class, 'RPTIssueExcel'])->name('rpt_issue_excel');
+
+//Material Return
+Route::get('inventory/material_return_info', [InventoryController::class, 'InventoryMaterialReturn'])->name('material_return_info');
+Route::post('/inventory/material_return_store', [InventoryController::class, 'inventory_material_return_store'])->name('inventory_material_return_store');
+Route::get('/inventory/material_return_details/{id}/{company_id}', [InventoryController::class, 'inventory_material_return_details'])->name('inventory_material_return_details');
+Route::post('/inventory/material_return_details_store/{company_id}', [InventoryController::class, 'inventory_material_return_details_store'])->name('inventory_material_return_details_store');
+Route::get('/inventory/material_return_final/{id}/{company_id}', [InventoryController::class, 'inventory_material_return_final'])->name('inventory_material_return_final');
+
+//edit
+Route::get('/inventory/material_return_edit/{mreturnd_id}/{company_id}', [InventoryController::class, 'inventory_material_return_edit'])->name('inventory_material_return_edit');
+Route::post('/inventory/material_return_update/{mreturnd_id}/{company_id}', [InventoryController::class, 'inventory_material_return_update'])->name('material_return_update');
+
+Route::get('/inventory/closing_stock', [InventoryController::class, 'ClosingStock'])->name('closing_stock');
+Route::post('/inventory/closing_stock', [InventoryController::class, 'ClosingStockList'])->name('ClosingStockList');
+// Route::post('/inventory/closing_stock', [InventoryController::class, 'ClosingStockUpdate'])->name('ClosingStockUpdate');
+
+
+//RPT
+Route::get('/inventory/rpt_return_list', [InventoryController::class, 'RPTMaterialReturnList'])->name('rpt_return_list');
+Route::get('/inventory/rpt_return_details/{return_master_no}/{company_id}', [InventoryController::class, 'RPTMaterialReturnView'])->name('rpt_return_details');
+Route::get('/inventory/rpt_return_print/{return_master_no}/{company_id}', [InventoryController::class, 'RPTMaterialReturnPrint'])->name('rpt_return_print');
+Route::get('/inventory/rpt_return_excel/{return_master_no}/{company_id}', [InventoryController::class, 'RPTReturnExcel'])->name('rpt_return_excel');
+
+
+//RPT all stock
+Route::get('/inventory/rpt_all_stock', [InventoryController::class, 'RptAllStock'])->name('rpt_all_stock');
+Route::post('/inventory/rpt_all_stock_list', [InventoryController::class, 'RptAllStockList'])->name('RptAllStockList');
+
+Route::get('inventory/rpt_product_stock', [InventoryController::class, 'RptProductStock'])->name('rpt_product_stock');
+Route::post('/inventory/rpt_product_stock_list', [InventoryController::class, 'RptProductStockList'])->name('RptProductStockList');
+
+//RPT product RR
+Route::get('/inventory/rpt_product_rr', [InventoryController::class, 'RptProductRR'])->name('rpt_product_rr');
+Route::post('/inventory/rpt_product_rr_list', [InventoryController::class, 'RptProductRRList'])->name('RptProductRRList');
+
+
+//RPT product Issue
+Route::get('/inventory/rpt_product_issue', [InventoryController::class, 'RptProductIssue'])->name('rpt_product_issue');
+Route::post('/inventory/rpt_product_issue_list', [InventoryController::class, 'RptProductIssueList'])->name('RptProductIssueList');
+
+//--------------------End Inventory---------------------------------------
+
+//----------------------File Manager------------------------------------
+Route::get('/file_manager', [App\Http\Controllers\ModuleController::class, 'file_manager'])->name('file_manager');
+
+//my drive
+Route::get('/file_manager/my_drive', [FileManagerController::class, 'my_drive'])->name('my_drive');
+Route::post('/file_manager/folder_store', [FileManagerController::class, 'folder_store'])->name('folder_store');
+Route::get('/file_manager/folder_view/{id}', [FileManagerController::class, 'folder_view'])->name('folder_view');
+Route::post('/file_manager/file_store', [FileManagerController::class, 'file_store'])->name('file_store');
+//Delete
+Route::get('/file_manager/folder_delete/{id}', [FileManagerController::class, 'folder_delete'])->name('folder_delete');
+Route::get('/file_manager/Sub_folder_delete/{sub_folder_id}', [FileManagerController::class, 'Sub_folder_delete'])->name('Sub_folder_delete');
+Route::get('/file_manager/file_delete/{file_id}', [FileManagerController::class, 'file_delete'])->name('file_delete');
+
+//sub folder and file store
+Route::post('/file_manager/folder_sub_store/{id}', [FileManagerController::class, 'folder_sub_store'])->name('folder_sub_store');
+Route::post('/file_manager/file_sub_store/{id}', [FileManagerController::class, 'file_sub_store'])->name('file_sub_store');
+ //Sub Child 
+Route::get('/file_manager/sub_folder_view/{id}', [FileManagerController::class, 'sub_folder_view'])->name('sub_folder_view');
+Route::post('/file_manager/sub_file_store/{id}', [FileManagerController::class, 'sub_file_store'])->name('sub_file_store');
+
+//Dawonload 
+Route::get('/file_manager/file_dawonload/{id}', [FileManagerController::class, 'fileDawonload'])->name('fileDawonload');
+
+
+
+//End File Manager----------------------File Manager------------------------------------
+
+
+
+
+
+
+
+
+
+//----------------------------ONLY AJAX call---------------------
+
+//Ajax call purchase
+Route::get('/get/purchase/product/{id}', [PurchaseController::class, 'GetProduct']);
+Route::get('/get/purchase/product_sub_group/{id}', [PurchaseController::class, 'GetPurchaseProductSubGroup']);
+Route::get('/get/purchase/unit/{id}', [PurchaseController::class, 'GetPurchaseUnit']);
+
+Route::get('/get/purchase/indent_product_sub_group/{id}/{indent_no}/{id2}', [PurchaseController::class, 'GetPurchaseIndentProductSubGroup']);
+Route::get('/get/purchase/indent_product/{id}/{indent_no}/{id2}', [PurchaseController::class, 'GetPurchaseIndentProduct']);
+
+
+//Close stock 
+Route::get('/get/purchase/closing_stock_product_sub_group/{id}', [PurchaseController::class, 'GetClosingStockProductSubGroup']);
+//RPT All purchase
+Route::get('/get/purchase/indent_list_report', [PurchaseController::class, 'GetPurchaseIndentListReport']);
+
+//End call purchase-----------
+
+
+//Ajax call inventory
+//RR
+Route::get('/get/supply_address/{id}', [InventoryController::class, 'GetSupplyAddress']);
+Route::get('/get/inventory/product_sub_group/{pg_id}/{indent_no}/{grr_no}/{id2}', [InventoryController::class, 'GetInvProductSubGroup']);
+Route::get('/get/inventory/product/{pg_sub_id}/{indent_no}/{grr_no}/{id2}', [InventoryController::class, 'GetInvProduct']);
+Route::get('/get/inventory/product_unit/{product_id}', [InventoryController::class, 'GetProductUnit']);
+Route::get('/get/inventory/indent_qty/{product_id}/{indent_no}/{id2}', [InventoryController::class, 'GetIndentQty']);
+
+// Material Requsition 
+Route::get('/get/matrial_requsition/product_sub_group/{id}', [InventoryController::class, 'GetRequsitionProductSubGroup']);
+Route::get('/get/matrial_requsition/product/{id}', [InventoryController::class, 'GetRequsitionProduct']);
+Route::get('/get/matrial_requsition/unit/product_list/{id}', [InventoryController::class, 'GetProductList']);
+Route::get('/get/matrial_requsition_product/{id}/{mrm_no}/{id2}', [InventoryController::class, 'GetMRMProduct']);
+
+//inventory Issue
+Route::get('/get/rim_issue/product_sub_group/{pg_id}/{mrm_no}/{rim_no}/{company_id}', [InventoryController::class, 'GetIssueSubGroup']);
+Route::get('/get/rim_issue/product/{pg_sub_id}/{mrm_no}/{rim_no}/{company_id}', [InventoryController::class, 'GetIssueProductGroup']);
+Route::get('/get/issue/qty/details/{product_id}/{mrm_no}/{company_id}', [InventoryController::class, 'GetIssueQtyDetails']);
+Route::get('/get/issue/total/stock/{product_id}/{mrm_no}/{company_id}', [InventoryController::class, 'GetIssueTotalStock']);
+
+//inventory return
+Route::get('/get/return/product_sub_group/{pg_id}', [InventoryController::class, 'GetReturnProductSubGroup']);
+Route::get('/get/return/product/{pg_sub_id}', [InventoryController::class, 'GetReturnProduct']);
+Route::get('/get/return/product_details/{product_id}', [InventoryController::class, 'GetReturnProductDetails']);
+Route::get('/get/material_return/product/{pg_sub_id}/{return_master_no}/{company_id}', [InventoryController::class, 'GetMaterialReturnProduct']);
+
+//RPT ALL Inventory
+Route::get('get/rpt_rr_list/{company_id}/{form}/{to}', [InventoryController::class, 'GetRPTRRList']);
+Route::get('get/rpt_requsition_list/{company_id}/{form}/{to}', [InventoryController::class, 'GetRPTRequsitionList']);
+Route::get('get/rpt_requsition_issue_list/{company_id}/{form}/{to}', [InventoryController::class, 'GetRPTRequsitionIssueList']);
+Route::get('get/rpt_return_list/{company_id}/{form}/{to}', [InventoryController::class, 'GetRPTMaterialReturnList']);
+
+
+//End Inventory Ajax---------------
+
+
+// ajax call
+Route::get('get/district/{id}', [DeedController::class, 'GetDistrict']);
+Route::get('get/upazilas/{id}', [DeedController::class, 'GetUpazila']);
+Route::get('get/union/{id}', [DeedController::class, 'GetUnion']);
+Route::get('get/mouja/{id}', [DeedController::class, 'GetMouja']);
+Route::get('get/doc_info/{id}', [DeedController::class, 'GetDocInfo']);
+
+Route::get('get/employee/{id}', [HrmBackOfficeController::class, 'GetEmployee']);
+Route::get('get/employeews/{id}', [HrmBackOfficeController::class, 'GetEmployeeWS']);
+Route::get('get/branch_add/{id}', [FinanceController::class, 'GetBranchAdd']);
+
+Route::get('get/desig/{id}', [HrmBackOfficeController::class, 'GetEmployeeDesig']);
+
+Route::get('/get/account_no/{id}/{id2}', [FinanceController::class, 'GetAccNo']);
+Route::get('/get/cheque_no/{id}', [App\Http\Controllers\FinanceController::class, 'GetChequeNo']);
+
+Route::get('/get/company/{id}', [AdminController::class, 'GetCompany']);
+Route::get('get/employee1/{id}', [AdminController::class, 'GetEmployee1']);
+
+Route::get('/get/main_menu/{id}', [AdminController::class, 'GetMainMenu']);
+
+Route::get('get/pg/{id}', [InventoryController::class, 'GetPgSub']);
+
+Route::get('get/employee2/{id}', [ITBackOfficeController::class, 'GetEmployee2']);
+Route::get('get/employee3/{id}/{id2}', [ITBackOfficeController::class, 'GetEmployee3']);
+Route::get('get/it_asset_info', [ITBackOfficeController::class, 'GetItAsset']);
+Route::get('get/issue_asset/{id}', [ITBackOfficeController::class, 'GetIssueAsset']);
+Route::get('get/it_asset_issue_list', [ITBackOfficeController::class, 'GetItAssetIssueList']);
+Route::get('get/it_asset_return_list', [ITBackOfficeController::class, 'GetItAssetReturnList']);
+Route::get('/get/it_asset_received/{id}', [ITBackOfficeController::class, 'GetAssetReceived']);
+Route::get('/get/it_asset_emp_info/{id1}', [ITBackOfficeController::class, 'GetAssetEmpInfo']);
+
+
+
+//Hrm rpt basic info list
+Route::get('/get/hrm/basic_info_list', [HrmBackOfficeController::class, 'GetHrmBasicInfoList']);
+Route::get('/get/hrm/basic_info_up_list', [HrmBackOfficeController::class, 'GetHrmBasicInfoUpList']);
+Route::get('get/rpt_basic_info_list', [HrmBackOfficeController::class, 'GetRptBasicInfoList']); 
+Route::get('get/rpt_basic_info_list_all', [HrmBackOfficeController::class, 'GetRptBasicInfoListAll']); 
+Route::get('get/company_policy/{id}', [HrmBackOfficeController::class, 'GetCompanyPolicy']);
+
+//End  ajax call---------------------------------------------------
+
+ //----------------------Sales------------------------------------
+    Route::get('/sales', [App\Http\Controllers\ModuleController::class, 'sales'])->name('sales');
+
+    //Quotation
+    Route::get('/sales/quotation', [SalesController::class, 'quotation'])->name('quotation');
+    Route::post('/sales/quotation_store', [SalesController::class, 'quotation_store'])->name('quotation_store');
+    Route::get('/sales/quotation_details/{id}/{company_id}', [SalesController::class, 'quotation_details'])->name('quotation_details');
+    Route::post('/sales/quotation_details_store/{id}/{company_id}', [SalesController::class, 'quotation_details_store'])->name('quotation_details_store');
+    Route::get('/sales/quotation_details_more/{id}/{company_id}', [SalesController::class, 'quotation_details_more'])->name('quotation_details_more');
+    Route::post('/sales/quotation_details_final/{id}/{company_id}', [SalesController::class, 'quotation_details_final'])->name('quotation_details_final');
+    //edit details
+    Route::get('/sales/quotation_details_edit/{id}/{company_id}', [SalesController::class, 'quotation_details_edit'])->name('quotation_details_edit');
+    Route::post('/sales/quotation_details_update/{id}/{company_id}', [SalesController::class, 'quotation_details_update'])->name('quotation_details_update');
+    
+    //RPT Quotation List
+    Route::get('/sales/rpt_quotation_list', [SalesController::class, 'quotation_list'])->name('rpt_quotation_list');
+    Route::get('/sales/rpt_quotation_view/{id}/{company_id}', [SalesController::class, 'rpt_quotation_view'])->name('rpt_quotation_view');
+    Route::get('/sales/rpt_quotation_print/{id}/{company_id}', [SalesController::class, 'rpt_quotation_print'])->name('rpt_quotation_print');
+    
+    //Ajax
+    Route::get('get/sales/quotation/GetCustomerList', [SalesController::class, 'GetCustomerList'])->name('GetCustomerList');
+    Route::get('get/sales/quotation/customer_details/{id}', [SalesController::class, 'GetCustomerDetails']);
+
+    //money_receipt
+    Route::get('/sales/money_receipt', [SalesController::class, 'MoneyReceipt'])->name('money_receipt');
+    Route::post('/sales/money_receipt_master', [SalesController::class, 'money_receipt_master'])->name('money_receipt_master');
+    Route::get('/sales/money_receipt_details/{id}/{company_id}', [SalesController::class, 'money_receipt_details'])->name('money_receipt_details');
+    Route::post('/sales/money_receipt_details_store/{id}/{company_id}', [SalesController::class, 'money_receipt_details_store'])->name('money_receipt_details_store');
+    Route::get('/sales/money_receipt_final/{id}/{company_id}', [SalesController::class, 'money_receipt_final'])->name('money_receipt_final');
+
+    //RPT money_receipt
+    Route::get('/sales/rpt_money_receipt_list', [SalesController::class, 'rpt_money_receipt_list'])->name('rpt_money_receipt_list');
+    Route::get('/get/sales/rpt_mr_list/{company_id}/{form}/{to}', [SalesController::class, 'GetMRList']);
+    Route::get('/sales/rpt_money_receipt_view/{id}/{company_id}', [SalesController::class, 'rpt_money_receipt_view'])->name('rpt_money_receipt_view');
+    Route::get('/sales/rpt_money_receipt_print/{id}/{company_id}', [SalesController::class, 'rpt_money_receipt_print'])->name('rpt_money_receipt_print');
+
+    //Sales Invoice
+    Route::get('/sales/sales_invoice', [SalesController::class, 'sales_invoice'])->name('sales_invoice');
+    Route::post('/sales/sales_invoice_master_store', [SalesController::class, 'sales_invoice_master_store'])->name('sales_invoice_master_store');
+    Route::get('/sales/sales_invoice_mr/{sim_no}/{company_id}', [SalesController::class, 'sales_invoice_mr'])->name('sales_invoice_mr');
+    Route::post('/sales/sales_invoice_add_mr/{sim_no}/{company_id}', [SalesController::class, 'sales_invoice_add_mr'])->name('sales_invoice_add_mr');
+    Route::get('/sales/sales_invoice_details/{sim_no}/{company_id}', [SalesController::class, 'sales_invoice_details'])->name('sales_invoice_details');
+    Route::post('/sales/sales_invoice_details_store/{sim_no}/{company_id}', [SalesController::class, 'sales_invoice_details_store'])->name('sales_invoice_details_store');
+    //update
+    Route::get('/sales/sales_invoice_details_edit/{sid_id}/{company_id}', [SalesController::class, 'sales_invoice_details_edit'])->name('sales_invoice_details_edit');
+    Route::post('/sales/sales_invoice_details_update/{sid_id}/{company_id}', [SalesController::class, 'sales_invoice_details_update'])->name('sales_invoice_details_update');
+    //serial
+    Route::get('/sales/sales_invoice_add_serial/{sid_id}/{company_id}', [SalesController::class, 'sales_invoice_add_serial'])->name('sales_invoice_add_serial');
+    Route::post('/sales/sales_invoice_serial_store/{sid_id}/{company_id}', [SalesController::class, 'sales_invoice_serial_store'])->name('sales_invoice_serial_store');
+    //final
+    Route::get('/sales/sales_invoice_end/{sim_id}/{company_id}', [SalesController::class, 'sales_invoice_end'])->name('sales_invoice_end');
+    Route::post('/sales/sales_invoice_final/{sim_id}/{company_id}', [SalesController::class, 'sales_invoice_final'])->name('sales_invoice_final');
+
+    //rpt sales invoice
+    Route::get('/sales/rpt_sales_invoice', [SalesController::class, 'rpt_sales_invoice'])->name('rpt_sales_invoice');
+    Route::get('/sales/rpt_sales_invoice_view/{id}/{company_id}', [SalesController::class, 'rpt_sales_invoice_view'])->name('rpt_sales_invoice_view');
+    Route::get('/sales/rpt_sales_invoice_print/{id}/{company_id}', [SalesController::class, 'rpt_sales_invoice_print'])->name('rpt_sales_invoice_print');
+
+    //Delivery Challan
+    Route::get('/sales/delivery_challan', [SalesController::class, 'delivery_challan'])->name('delivery_challan');
+    Route::get('/sales/create_delivery_challan/{id}/{company_id}', [SalesController::class, 'create_delivery_challan'])->name('create_delivery_challan');
+    Route::post('/sales/create_delivery_challan_master/{id}/{company_id}', [SalesController::class, 'create_delivery_challan_master'])->name('create_delivery_challan_master');
+    Route::get('/sales/delivery_challan_details/{id}/{company_id}', [SalesController::class, 'delivery_challan_details'])->name('delivery_challan_details');
+    Route::post('/sales/delivery_challan_details_store/{id}/{company_id}', [SalesController::class, 'delivery_challan_details_store'])->name('delivery_challan_details_store');
+    //serial
+    Route::get('/sales/delivery_challan_serial/{id}/{company_id}', [SalesController::class, 'delivery_challan_serial'])->name('delivery_challan_serial');
+    Route::post('/sales/delivery_challan_serial_store/{id}/{company_id}', [SalesController::class, 'delivery_challan_serial_store'])->name('delivery_challan_serial_store');
+    //final
+    Route::get('/sales/delivery_challan_details_final/{id}/{company_id}', [SalesController::class, 'delivery_challan_details_final'])->name('delivery_challan_details_final');
+
+    //rpt
+    Route::get('/sales/rpt_delivery_challan', [SalesController::class, 'rpt_delivery_challan'])->name('rpt_delivery_challan');
+    Route::get('/sales/rpt_delivery_challan_view/{id}/{company_id}', [SalesController::class, 'rpt_delivery_challan_view'])->name('rpt_delivery_challan_view');
+    Route::get('/sales/rpt_delivery_challan_print/{id}/{company_id}', [SalesController::class, 'rpt_delivery_challan_print'])->name('rpt_delivery_challan_print');
+
+    //---------------------------------------Only Ajax
+    // Quotation list
+    Route::get('/get/sales/quotation_list/{company_id}/{form}/{to}', [SalesController::class, 'GetSalesQuotationList'])->name('GetSalesQuotationList');
+
+    // money receipt customer balance 
+    Route::get('/get/sales/customer_previous_balance/{id}', [SalesController::class, 'GetCustomerPreviousBalance']);
+
+    //Ajax sales 
+    Route::get('/get/sales/invoice_cust_details/{id}', [SalesController::class, 'GetInvoiceCustDetails']);
+    Route::get('/get/sales/musak_no/{company_id}', [SalesController::class, 'GetInvoiceMusakno']);
+    Route::get('/get/sales/sales_invoice_list/{company_id}/{form}/{to}', [SalesController::class, 'GetRptSalesInvoiceList']);
+
+
+    //delivery challan 
+    Route::get('/get/delivery_challan/product_details/{product_id}/{id}/{company_id}', [SalesController::class, 'GetDeliveryProductDetails']);
+    Route::get('/get/sales/dch_list/{company_id}', [SalesController::class, 'GetDCHList']);
+    Route::get('/get/sales/delivary_challan_list/{company_id}/{form}/{to}', [SalesController::class, 'GetRptDeliverychallanList']);
+   //End---------------------------------------Only Ajax
+
+
+    //End Sales----------------------Sales------------------------------------
+
+});
+
+// Note:: without login url , set end web 
+
+
+Route::get('/{id1}/{id2}', function($id1,$id2)
+ {
+    $dec = base64_decode($id2);
+    $user_id = base64_decode($id1);
+    $files = DB::table('pro_file')->where('user_id',$user_id)->get();
+
+	foreach ($files as $file)
+	{
+		if (Hash::check($file->file_id, $dec))
+		{
+			$m_file = DB::table('pro_file')->where('file_id', $file->file_id)->first();
+			if ($m_file)
+			{
+				return response()->download($m_file->myFile);
+			} else {
+				return "File not found .<br> Please, Talk To Developer.";
+			}
+		}
+	}
+
+    
+});
+
+
+//  //Clear route cache
+//  Route::get('/route-clear', function() {
+//     \Artisan::call('route:clear');
+//     return 'Routes cleared';
+// });
+
+
+// // Clear view clear
+// Route::get('/view-clear', function() {
+//     \Artisan::call('view:clear');
+//     return 'View cleared';
+// });
+
+// // Clear cache using optimize
+// Route::get('/optimize', function() {
+//     \Artisan::call('optimize');
+//     return 'Optimize view, route, config cache cleared';
+// });
+
+
+// Route::get('/sub_need',function(){
+// $products = DB::table('pro_product')->where('valid',1)->get();
+// foreach($products as $product){
+//     DB::table('pro_graw_issue_details')
+//     // ->where('pg_id',$product->pg_id)
+//     ->where('product_id',$product->product_id)
+//     ->update(['pg_sub_id'=>$product->pg_sub_id]);
+// }
+// return "Done";
+// });
+
+Route::get('/sub_level',function(){
+$m_employee_info = DB::table('pro_employee_info')->get();
+foreach($m_employee_info as $row_employee_info){
+    DB::table('pro_level_step')->insert([
+    	'level_step'=>$row_employee_info->level_step,
+    	'employee_id'=>$row_employee_info->employee_id,
+    	'report_to_id'=>$row_employee_info->report_to_id,
+    	'user_id'=>$row_employee_info->level_step,
+    	'entry_date'=>date('Y-m-d'),
+    	'entry_time'=>date('H:i:s'),
+    	'valid'=>'1',
+
+    	]);
+}
+return "Done";
+});
+
+
+// Route::get('/sub_group',function(){
+
+// $ci_indent_details = DB::table('pro_indent_details')->get();
+// // return ($products);
+// foreach($ci_indent_details as $row_indent_details){
+// 	$products = DB::table('pro_product')
+// 	->where('product_id',$row_indent_details->product_id)
+// 	->first();
+
+//     DB::table('pro_indent_details')
+//     ->where('indent_details_id',$row_indent_details->indent_details_id)
+//     ->update(['pg_sub_id'=>$products->pg_sub_id]);
+// }
+// return "Done";
+// });
+
+
+
+// // Route::get('/sub_need',function(){
+
+// // $ci_indent_details = DB::table('pro_indent_details')->get();
+// // // return ($products);
+// // foreach($ci_indent_details as $row_indent_details){
+// // 	$products = DB::table('pro_product')
+// // 	->where('product_id',$row_indent_details->product_id)
+// // 	->first();
+
+// //     DB::table('pro_indent_details')
+// //     ->where('indent_details_id',$row_indent_details->indent_details_id)
+// //     ->update(['product_unit'=>$products->unit]);
+// // }
+// // return "Done";
+// // });
+
+
+// // Route::get('/sub_need',function(){
+
+// // $products = DB::table('pro_attendance')->get();
+// // // return ($products);
+// // foreach($products as $product){
+// // $x=	str_pad($product->employee_id,8,"0",STR_PAD_LEFT);
+// //     DB::table('pro_attendance')
+// //     ->where('attendance_id',$product->attendance_id)
+// //     ->update(['employee_id'=>$x]);
+// // }
+// // return "Done";
+// // });
+//  // Route::get('/check',function(){
+
+//  //                $m_employee_id='00000160';
+//  //                // $m_desig_id=$row_attn_employee->desig_id;
+//  //                // $m_department_id=$row_attn_employee->department_id;
+//  //                // $m_placeofposting_id=$row_attn_employee->placeofposting_id;
+
+//  //                $m_working_day=DB::table('pro_attendance')
+//  //                ->whereBetween('attn_date',['2023-06-01','2023-06-30'])
+//  //                ->where('day_status','R')
+//  //                ->where('employee_id',$m_employee_id)
+//  //                ->groupBy('attn_date')
+//  //                ->having('attn_date','>',1)
+//  //                ->count();
+//  //               return $m_twd=$m_working_day;
+//  //                dd($m_twd);
+
+
+
+
+// // $remove_duplicateRecords =  DB::table('pro_teams')
+// //               ->select('team_leader_id')
+// //               ->groupBy('team_leader_id')
+// //               ->having('team_leader_id', '>', 1)
+// //               ->get();
+
+//  // });
+
+// Route::get('/atten_table_split',function(){
+
+// $start_date = "2023-08-01";
+// $end_date = "2023-08-31";
+
+// $data = DB::table('pro_attendance')->whereBetween('attn_date', [$start_date, $end_date])->get();
+
+// foreach($data as $row){
+
+//  DB::table('pro_attendance_0823')->insert([
+//             // 'attendance_id'=>$row->attendance_id,
+//             'company_id'=>$row->company_id,
+//             'employee_id'=>$row->employee_id,
+//             'machine_id'=>$row->machine_id,
+//             'desig_id'=>$row->desig_id,
+//             'department_id'=>$row->department_id,
+//             'placeofposting_id'=>$row->placeofposting_id,
+//             'att_policy_id'=>$row->att_policy_id,
+//             'attn_date'=>$row->attn_date,
+//             'r_in_time'=>$row->r_in_time,
+//             'p_in_time'=>$row->p_in_time,
+//             'p_out_time'=>$row->p_out_time,
+//             'in_time'=>$row->in_time,
+//             'nodeid_in'=>$row->nodeid_in,
+//             'out_time'=>$row->out_time,
+//             'nodeid_out'=>$row->nodeid_out,
+//             'day_name'=>$row->day_name,
+//             'day_status'=>$row->day_status,
+//             'total_working_hour'=>$row->total_working_hour,
+//             'ot_minute'=>$row->ot_minute,
+//             'late_min'=>$row->late_min,
+//             'early_min'=>$row->early_min,
+//             'status'=>$row->status,
+//             'is_quesitonable'=>$row->is_quesitonable,
+//             'process_status'=>$row->process_status,
+//             'user_id'=>$row->user_id,
+//             'entry_date'=>$row->entry_date,
+//             'entry_time'=>$row->entry_time,
+//             'valid'=>$row->valid,
+//             'psm_id'=>$row->psm_id,
+//         ]);
+
+
+// }
+// return "Done";
+// });
